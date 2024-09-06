@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottie Animation Player</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🎬 Lottie Animation Player</h1>
+
+        <form action="/" method="get" class="form">
+            <label for="filename" class="label">Select a Lottie JSON file to play:</label>
+            <select name="filename" id="filename" class="dropdown">
+                {% for file in lottie_files %}
+                <option value="{{ file }}" {% if selected_file == file %}selected{% endif %}>{{ file }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">Play Animation</button>
+        </form>
+
+        {% if selected_file %}
+        <h2 class="subtitle">Now Playing: {{ selected_file }}</h2>
+        <div id="lottie-container" class="lottie-container"></div>
+        <script>
+            lottie.loadAnimation({
+                container: document.getElementById('lottie-container'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: "{{ url_for('static', filename='lotties/' + selected_file) }}"
+            });
+        </script>
+        {% else %}
+        <p class="message">Please select a Lottie file to play the animation.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
